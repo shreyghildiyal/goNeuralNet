@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 
 	"github.com/shreyghildiyal/goNeuralNet/neuralObjects"
 )
@@ -10,15 +9,18 @@ import (
 func main() {
 	fmt.Println("Hello World")
 
-	network := neuralObjects.NewNetwork(2, []int{2, 2}, 1)
+	network := neuralObjects.NewNetwork(2, []int{2, 2}, 2)
 
-	for i := 0; i < 3; i++ {
-		a := rand.Float64()
-		b := rand.Float64()
+	for i := 0; i < 5; i++ {
+		// a := rand.Float64()
+		// b := rand.Float64()
+
+		a := float64(i)
+		b := float64(i + 1)
 
 		network.Update([]float64{a, b})
 
-		fmt.Println(a, b, network.GetOuputLayer().GetNodes()[0].GetActivation())
+		network.PrintAllLayerActivations()
 	}
 
 	// fmt.Println("Input Layer")
