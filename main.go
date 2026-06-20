@@ -5,7 +5,7 @@ import (
 	"log"
 
 	fileutils "github.com/shreyghildiyal/goNeuralNet/fileUtils"
-	"github.com/shreyghildiyal/goNeuralNet/neuralObjects"
+	// "github.com/shreyghildiyal/goNeuralNet/neuralObjects"
 )
 
 func main() {
@@ -33,16 +33,16 @@ func DoFileReadingStuff() ([]int, [][]int) {
 	return labels, images
 }
 
-func DoNetworkStuff() {
-	network := neuralObjects.NewNetwork(2, []int{2, 2}, 2)
+// func DoNetworkStuff() {
+// 	network := neuralObjects.NewNetwork(2, []int{2, 2}, 2)
 
-	for i := 0; i < 5; i++ {
+// 	for i := 0; i < 5; i++ {
 
-		a := float64(i)
-		b := float64(i + 1)
+// 		a := float64(i)
+// 		b := float64(i + 1)
 
-		network.Update([]float64{a, b})
+// 		// network.Update([]float64{a, b})
 
-		network.PrintAllLayerActivations()
-	}
-}
+// 		// network.PrintAllLayerActivations()
+// 	}
+// }
