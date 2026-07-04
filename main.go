@@ -6,6 +6,7 @@ import (
 
 	fileutils "github.com/shreyghildiyal/goNeuralNet/fileUtils"
 	"github.com/shreyghildiyal/goNeuralNet/neuralObjects"
+	"github.com/shreyghildiyal/goNeuralNet/utils"
 	// "github.com/shreyghildiyal/goNeuralNet/neuralObjects"
 )
 
@@ -18,10 +19,17 @@ func main() {
 
 	labels, images := DoFileReadingStuff()
 
+	labelArr := utils.NormalizeLabels(labels, 10) // converts the labels into an array of ten float64 values. all except one are set to zero.
+	_ = labelArr
+	imageNormalizer := utils.NewImageNormalizer(0, 255, 0, 1)
+	normalizedImages := imageNormalizer.NormalizeImages(images) // sets the pixel value between 0 and 1
+
 	log.Println("Number of labels", len(labels))
 	log.Println("Number of images", len(images))
 
-	network := neuralObjects.NewNetwork([]int{5, 5, 5})
+	network := neuralObjects.NewNetwork([]int{len(normalizedImages[0]), 5, 5, 5, len(labelArr[0])})
+
+	network.Train(normalizedImages, labelArr)
 
 	_ = network
 

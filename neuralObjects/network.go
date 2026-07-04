@@ -35,3 +35,7 @@ func (network *Network) GetInputLayer() *NeuralLayer {
 func (network *Network) GetLayer(i int) *NeuralLayer {
 	return &network.layers[i]
 }
+
+func (network *Network) Train(images [][]float64, labels [][]float64) {
+
+}
