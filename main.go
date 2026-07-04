@@ -5,6 +5,7 @@ import (
 	"log"
 
 	fileutils "github.com/shreyghildiyal/goNeuralNet/fileUtils"
+	"github.com/shreyghildiyal/goNeuralNet/neuralObjects"
 	// "github.com/shreyghildiyal/goNeuralNet/neuralObjects"
 )
 
@@ -20,10 +21,11 @@ func main() {
 	log.Println("Number of labels", len(labels))
 	log.Println("Number of images", len(images))
 
-	// fmt.Println("Input Layer")
-	// network.GetInputLayer().PrintCurrentNodeValues()
-	// fmt.Println("Output Layer")
-	// network.GetOuputLayer().PrintCurrentNodeValues()
+	network := neuralObjects.NewNetwork([]int{5, 5, 5})
+
+	_ = network
+
+	// break the training data
 }
 
 func DoFileReadingStuff() ([]int, [][]int) {
