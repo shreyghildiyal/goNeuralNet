@@ -70,7 +70,7 @@ func (network *Network) backPropagate(targetLabel []float64) {
 	layersCount := len(network.layers)
 
 	for i := 0; i < len(targetLabel); i++ {
-		errSlice[i] = targetLabel[i] - network.layers[layersCount].lastOutputs[i]
+		errSlice[i] = targetLabel[i] - network.layers[layersCount-1].lastOutputs[i]
 	}
 
 	for i := len(network.layers) - 1; i > 0; i-- {

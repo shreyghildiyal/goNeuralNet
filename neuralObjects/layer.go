@@ -1,7 +1,6 @@
 package neuralObjects
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/shreyghildiyal/goNeuralNet/activation"
@@ -105,6 +104,6 @@ func NewNeuralLayer(nodeCount int, prevLayerNodeCount int, activationFunction ac
 		layer.biases[i] = rand.Float64()
 		// layer.nodes = append(layer.nodes, NewNode(prevLayerNodeCount))
 	}
-	fmt.Println("New Layer created with weights", layer.weights)
+	// fmt.Println("New Layer created with weights", layer.weights)
 	return layer
 }
