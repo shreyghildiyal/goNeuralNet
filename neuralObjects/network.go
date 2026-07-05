@@ -1,13 +1,17 @@
 package neuralObjects
 
-import "github.com/shreyghildiyal/goNeuralNet/activation"
+import (
+	"fmt"
+
+	"github.com/shreyghildiyal/goNeuralNet/activation"
+)
 
 type Network struct {
 	layers       []NeuralLayer
 	learningRate float64
 }
 
-func NewNetwork(layerCounts []int) Network {
+func NewNetwork(layerCounts []int, learningRate float64) Network {
 	network := Network{}
 	// network.layers = NewNeuralLayer(inputLayerNodeCount, 0, activation.FastSigmoid)
 
@@ -18,6 +22,7 @@ func NewNetwork(layerCounts []int) Network {
 		network.layers = append(network.layers, NewNeuralLayer(layerNodeCount, prevNodeCount, activation.FastSigmoid))
 		prevNodeCount = layerNodeCount
 	}
+	network.learningRate = learningRate
 
 	// network.outputLayer = NewNeuralLayer(outputLayerNodeCount, prevNodeCount, activation.FastSigmoid)
 	return network
@@ -37,12 +42,11 @@ func (network *Network) GetLayer(i int) *NeuralLayer {
 
 func (network *Network) Train(images [][]float64, labels [][]float64, epochs, batchSize int) {
 
-	// one epoch runs through the entire dataset once.
-
 	for i := 0; i < epochs; i++ {
 		for j := 0; j < len(images); j += batchSize {
 			network.runBatch(images, labels, j, batchSize)
 		}
+
 	}
 	// one batch runs through upto a certain number of input values before updating the network values
 
@@ -56,6 +60,13 @@ func (network *Network) runBatch(images [][]float64, labels [][]float64, startIn
 	for i := 0; i < batchsize && startIndex+i < len(images); i++ {
 		network.forwardPass(images[startIndex+i])
 		network.backPropagate(labels[startIndex+i])
+		// if i%100 == 0
+
+		if startIndex+i == 101 { // Just print for the first image of the batch
+			fmt.Printf("Outputs: v%0.3f | Target: v%0.3f | Output Deltas: v%0.6f\n",
+				network.layers[len(network.layers)-1].lastOutputs, labels[startIndex+i], network.layers[len(network.layers)-1].currentBiasErrors)
+		}
+
 	}
 
 	for i := 1; i < len(network.layers); i++ {
@@ -74,7 +85,7 @@ func (network *Network) backPropagate(targetLabel []float64) {
 	}
 
 	for i := len(network.layers) - 1; i > 0; i-- {
-		errSlice = network.layers[i].BackPropagate(errSlice, network.layers[i-1])
+		errSlice = network.layers[i].BackPropagate(errSlice, &network.layers[i-1])
 	}
 
 	// panic("unimplemeted")
@@ -90,4 +101,13 @@ func (network *Network) forwardPass(input []float64) {
 	for i := 1; i < len(network.layers); i++ {
 		network.layers[i].ForwardUpdate(&network.layers[i-1])
 	}
+}
+
+func (network *Network) GetResult(input []float64) []float64 {
+
+	network.forwardPass(input)
+
+	result := make([]float64, len(network.layers[len(network.layers)-1].lastOutputs))
+	copy(result, network.layers[len(network.layers)-1].lastOutputs)
+	return result
 }

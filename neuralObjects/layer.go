@@ -27,10 +27,10 @@ func (nl *NeuralLayer) ApplyAndResetGradients(batchSize float64, rate float64) {
 	// panic("unimplemented")
 	for i := 0; i < len(nl.weights); i++ {
 		for j := 0; j < len(nl.weights[i]); j++ {
-			nl.weights[i][j] -= rate * nl.cumulativeWeightErrors[i][j] / batchSize
+			nl.weights[i][j] += rate * nl.cumulativeWeightErrors[i][j] / batchSize
 			nl.cumulativeWeightErrors[i][j] = 0
 		}
-		nl.biases[i] -= rate * nl.cumulativeBiasErrors[i] / batchSize
+		nl.biases[i] += rate * nl.cumulativeBiasErrors[i] / batchSize
 		nl.cumulativeBiasErrors[i] = 0
 	}
 }
@@ -50,7 +50,7 @@ func (nl *NeuralLayer) ForwardUpdate(prevLayer *NeuralLayer) {
 	}
 }
 
-func (nl *NeuralLayer) BackPropagate(incomingErrors []float64, prevLayer NeuralLayer) []float64 {
+func (nl *NeuralLayer) BackPropagate(incomingErrors []float64, prevLayer *NeuralLayer) []float64 {
 
 	numNodes := len(nl.weights)
 	prevLayerErrors := make([]float64, len(prevLayer.lastOutputs))

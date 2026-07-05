@@ -27,9 +27,29 @@ func main() {
 	log.Println("Number of labels", len(labels))
 	log.Println("Number of images", len(images))
 
-	network := neuralObjects.NewNetwork([]int{len(normalizedImages[0]), 5, 5, 5, len(labelArr[0])})
+	network := neuralObjects.NewNetwork([]int{len(normalizedImages[0]), len(labelArr[0])}, 0.2)
 
-	network.Train(normalizedImages, labelArr, 10, 20)
+	network.Train(normalizedImages, labelArr, 20, 20)
+
+	// dipstick test
+
+	// for i := 0; i < 20; i++ {
+	// 	res := network.GetResult(normalizedImages[i])
+	// 	fmt.Println("answer: ", utils.MaxIndex(res), "actual", labels[i])
+	// }
+
+	foundCount := 0
+	for i, img := range normalizedImages {
+		res := network.GetResult(img)
+		if labels[i] == utils.MaxIndex(res) {
+			fmt.Println("Found match at ", i, "found val", labels[i])
+			foundCount++
+			if foundCount >= 10 {
+				break
+			}
+
+		}
+	}
 
 	// break the training data
 }
