@@ -29,9 +29,7 @@ func main() {
 
 	network := neuralObjects.NewNetwork([]int{len(normalizedImages[0]), 5, 5, 5, len(labelArr[0])})
 
-	network.Train(normalizedImages, labelArr)
-
-	_ = network
+	network.Train(normalizedImages, labelArr, 10, 20)
 
 	// break the training data
 }
