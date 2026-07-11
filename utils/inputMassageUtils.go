@@ -1,5 +1,7 @@
 package utils
 
+import "fmt"
+
 func NormalizeLabels(labels []int, numLabels int) [][]float64 {
 	labelArr := make([][]float64, len(labels))
 	for index, label := range labels {
@@ -15,21 +17,22 @@ func NormalizeLabels(labels []int, numLabels int) [][]float64 {
 }
 
 type ImageNormalizer struct {
-	minVal      float64
-	maxVal      float64
+	inputMin    float64
+	inputMax    float64
 	targetMin   float64
 	targetMax   float64
-	valRange    float64
+	inputRange  float64
 	targetRange float64
 }
 
-func NewImageNormalizer(minVal, maxVal, targetMin, targetMax float64) ImageNormalizer {
+func NewImageNormalizer(inputMin, inputMax, targetMin, targetMax float64) ImageNormalizer {
+	// fmt.Printf("MinVal: %.2f, MaxVal: %.2ff, TargetMin: %.2f, targetMax: %.2f, InputRange: %.2f, targetRange: %.2f\n", inputMin, inputMax, targetMin, targetMax, inputMax-inputMin, targetMax-targetMin)
 	return ImageNormalizer{
-		minVal:      minVal,
-		maxVal:      maxVal,
+		inputMin:    inputMin,
+		inputMax:    inputMax,
 		targetMin:   targetMin,
 		targetMax:   targetMax,
-		valRange:    maxVal - minVal,
+		inputRange:  inputMax - inputMin,
 		targetRange: targetMax - targetMin,
 	}
 }
@@ -49,5 +52,6 @@ func (normalizer *ImageNormalizer) NormalizeImages(images [][]int) [][]float64 {
 }
 
 func (normalizer *ImageNormalizer) normalizedVal(val int) float64 {
-	return normalizer.targetMin + (normalizer.targetRange)*(float64(val)-normalizer.minVal)/(normalizer.valRange)
+	fmt.Printf("MinVal: %.2f, TargetMin: %.2f,  InputRange: %.2f, targetRange: %.2f, val: %d\n", normalizer.inputMin, normalizer.targetMin, normalizer.inputRange, normalizer.targetRange, val)
+	return normalizer.targetMin + (normalizer.targetRange)*(float64(val)-normalizer.inputMin)/(normalizer.inputRange)
 }

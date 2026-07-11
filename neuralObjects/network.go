@@ -42,8 +42,13 @@ func (network *Network) GetLayer(i int) *NeuralLayer {
 
 func (network *Network) Train(images [][]float64, labels [][]float64, epochs, batchSize int) {
 
+	for i := 0; i < 10; i++ {
+		fmt.Println("LabelArr", i, labels[i])
+	}
+
 	for i := 0; i < epochs; i++ {
 		for j := 0; j < len(images); j += batchSize {
+			fmt.Printf("Runningbatch with params epoch: %d | j: %d | batchSize: %d\n ", i, j, batchSize)
 			network.runBatch(images, labels, j, batchSize)
 		}
 
@@ -62,10 +67,10 @@ func (network *Network) runBatch(images [][]float64, labels [][]float64, startIn
 		network.backPropagate(labels[startIndex+i])
 		// if i%100 == 0
 
-		if startIndex+i == 101 { // Just print for the first image of the batch
-			fmt.Printf("Outputs: v%0.3f | Target: v%0.3f | Output Deltas: v%0.6f\n",
-				network.layers[len(network.layers)-1].lastOutputs, labels[startIndex+i], network.layers[len(network.layers)-1].currentBiasErrors)
-		}
+		// if startIndex+i == 101 { // Just print for the first image of the batch
+		fmt.Printf("Outputs: v%0.3f | Target: v%0.3f | Output Deltas: v%0.6f | i: %d | startIndex: %d\n",
+			network.layers[len(network.layers)-1].lastOutputs, labels[startIndex+i], network.layers[len(network.layers)-1].currentBiasErrors, i, startIndex)
+		// }
 
 	}
 

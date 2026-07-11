@@ -3,6 +3,7 @@ package fileutils
 import (
 	"encoding/binary"
 	"fmt"
+	"io"
 	"log"
 	"os"
 )
@@ -53,6 +54,17 @@ func ReadImages(filePath string) [][]int {
 
 	// 2. Allocate your outer slice of images
 	images := make([][]int, itemCount)
+
+	// Read all raw pixel bytes sequentially from the file stream
+	rawBytes := make([]byte, totalPixels)
+	if _, err := io.ReadFull(f, rawBytes); err != nil {
+		log.Fatal("Failed reading raw pixel body from file:", err)
+	}
+
+	// Transfer the bytes directly into your fast integer pool
+	for i := 0; i < totalPixels; i++ {
+		allPixels[i] = int(rawBytes[i])
+	}
 
 	// 3. Point each image row to its respective 784-element segment inside the giant pool
 	for i := 0; i < int(itemCount); i++ {

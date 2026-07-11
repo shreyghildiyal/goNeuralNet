@@ -19,17 +19,30 @@ func main() {
 
 	labels, images := DoFileReadingStuff()
 
-	labelArr := utils.NormalizeLabels(labels, 10) // converts the labels into an array of ten float64 values. all except one are set to zero.
-	_ = labelArr
+	fmt.Println("Labels", labels[:10])
+
+	labelArr := utils.NormalizeLabels(labels[:10], 10) // converts the labels into an array of ten float64 values. all except one are set to zero.
+	// for i := 0; i < 10; i++ {
+	// 	fmt.Println("LabelArr", i, labelArr[i])
+	// }
+
 	imageNormalizer := utils.NewImageNormalizer(0, 255, 0, 1)
-	normalizedImages := imageNormalizer.NormalizeImages(images) // sets the pixel value between 0 and 1
+	normalizedImages := imageNormalizer.NormalizeImages(images[:10]) // sets the pixel value between 0 and 1
+
+	diffImg := make([]float64, len(normalizedImages[0]))
+
+	for i := range normalizedImages[0] {
+		diffImg[i] = normalizedImages[0][i] - normalizedImages[1][i]
+	}
+
+	fmt.Println("IMageDIff", diffImg)
 
 	log.Println("Number of labels", len(labels))
 	log.Println("Number of images", len(images))
 
 	network := neuralObjects.NewNetwork([]int{len(normalizedImages[0]), len(labelArr[0])}, 0.2)
 
-	network.Train(normalizedImages, labelArr, 20, 20)
+	network.Train(normalizedImages, labelArr, 5, 20)
 
 	// dipstick test
 
